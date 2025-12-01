@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SGG · 私房菜 | 菜单</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'baoding-red': '#8B0000', // Darker traditional red
+              'baoding-paper': '#F9F7E8', // Light beige paper
+              'baoding-gold': '#D4AF37',
+              'baoding-dark': '#2C2C2C',
+            },
+            fontFamily: {
+              serif: ['"Noto Serif SC"', 'serif'],
+              sans: ['"Noto Sans SC"', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #555; /* Dark background for preview mode */
+      }
+      
+      .menu-page {
+        background-color: #F9F7E8;
+        background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4af37' fill-opacity='0.05' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+      }
+
+      /* Print specific styles */
+      @media print {
+        @page {
+          margin: 0;
+          size: A4 portrait;
+        }
+        
+        /* Force desktop-like context explicitly */
+        html, body {
+          width: 210mm !important;
+          min-width: 210mm !important;
+          max-width: 210mm !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          background-color: white !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+
+        /* Hide everything by default */
+        body > * {
+          display: none !important;
+        }
+
+        /* Only show the root app wrapper */
+        #root {
+          display: block !important;
+          width: 210mm !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        /* 
+         * CRITICAL: Override the App's responsive containers.
+         * We target the nested divs to strip away mobile styling.
+         */
+        #root > div {
+          background-color: white !important;
+          overflow: visible !important;
+          height: auto !important;
+          min-height: 0 !important;
+          display: block !important;
+          padding: 0 !important;
+        }
+
+        /* Target the scroll container wrapper specifically */
+        #print-container-wrapper {
+          display: block !important;
+          position: relative !important;
+          width: 210mm !important;
+          height: auto !important;
+          overflow: visible !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          visibility: visible !important;
+        }
+
+        /* Target the actual menu content */
+        #menu-content {
+          display: block !important;
+          width: 210mm !important;
+          margin: 0 !important;
+          visibility: visible !important;
+          gap: 0 !important; /* Remove gap between pages */
+        }
+
+        /* Reset the menu page style for print context */
+        .menu-page {
+          display: block !important;
+          visibility: visible !important;
+          width: 210mm !important;
+          height: 297mm !important; /* Force A4 height */
+          min-height: 297mm !important;
+          max-height: 297mm !important;
+          box-shadow: none !important;
+          margin: 0 !important;
+          border: none !important;
+          background-color: white !important; 
+          position: relative !important;
+          left: 0 !important;
+          top: 0 !important;
+          page-break-after: always !important;
+          overflow: hidden !important; /* Clean edges */
+        }
+
+        .menu-page:last-child {
+          page-break-after: auto !important;
+        }
+
+        /* Hide interactive elements explicitly */
+        .no-print {
+          display: none !important;
+        }
+
+        /* Ensure grid works correctly and ignores mobile flex/stacking */
+        .grid {
+          display: grid !important;
+        }
+
+        /* Reset text scaling that mobile browsers might apply */
+        * {
+          -webkit-text-size-adjust: 100% !important;
+          text-size-adjust: 100% !important;
+        }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

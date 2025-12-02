@@ -20,9 +20,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
 
   // --- Dish Handlers ---
-  const handleSaveDish = () => {
-    if (!editingDish || !editingDish.name || !editingDish.category) return;
-    
+  const handleSaveDish = (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+
+    if (!editingDish || !editingDish.name || !editingDish.category) {
+      alert('请填写菜名和分类');
+      return;
+    }
+
     if (editingDish.id) {
       // Update
       setDishes(dishes.map(d => d.id === editingDish.id ? { ...d, ...editingDish } as Dish : d));
@@ -31,6 +37,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       const newDish: Dish = {
         ...editingDish,
         id: Date.now().toString(),
+        name: editingDish.name,
+        category: editingDish.category,
         price: Number(editingDish.price) || 0,
         imageUrl: editingDish.imageUrl || '',
         description: editingDish.description || '',
@@ -88,27 +96,51 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
   return (
     <div className="fixed inset-0 z-[60] bg-gray-100 overflow-y-auto">
-      {/* Responsive Header */}
-      <div className="bg-baoding-dark text-white p-4 sticky top-0 flex flex-col md:flex-row justify-between items-center shadow-lg z-10 gap-4 md:gap-0">
-        <h2 className="text-xl font-bold">后台管理系统</h2>
-        <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto items-center">
-           <div className="flex bg-gray-700 rounded p-1 w-full md:w-auto justify-center">
-             <button 
-               onClick={() => setActiveTab('dishes')}
-               className={`flex-1 md:flex-none px-4 py-2 md:py-1 rounded text-sm md:text-base ${activeTab === 'dishes' ? 'bg-white text-baoding-dark' : 'text-gray-300'}`}
-             >
-               菜品管理
-             </button>
-             <button 
-               onClick={() => setActiveTab('categories')}
-               className={`flex-1 md:flex-none px-4 py-2 md:py-1 rounded text-sm md:text-base ${activeTab === 'categories' ? 'bg-white text-baoding-dark' : 'text-gray-300'}`}
-             >
-               分类设置
-             </button>
-           </div>
-           <button onClick={onClose} className="text-gray-300 hover:text-white text-sm md:text-base border border-gray-600 px-3 py-1 rounded md:border-none">
-             退出后台
-           </button>
+      {/* Simplified Admin Header */}
+      <div className="bg-baoding-dark text-white sticky top-0 shadow-md z-10">
+        <div className="max-w-7xl mx-auto px-3 md:px-6 py-2 md:py-2.5">
+          <div className="flex items-center justify-between gap-3">
+
+            {/* Left: Title & Tab Toggle */}
+            <div className="flex items-center gap-3 md:gap-4">
+              <h2 className="text-base md:text-lg font-bold whitespace-nowrap">后台管理</h2>
+
+              {/* Tab Toggle */}
+              <div className="flex bg-gray-700/50 rounded-md p-0.5">
+                <button
+                  onClick={() => setActiveTab('dishes')}
+                  className={`px-3 md:px-4 py-1 rounded text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                    activeTab === 'dishes'
+                    ? 'bg-white text-baoding-dark shadow-sm'
+                    : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  菜品管理
+                </button>
+                <button
+                  onClick={() => setActiveTab('categories')}
+                  className={`px-3 md:px-4 py-1 rounded text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                    activeTab === 'categories'
+                    ? 'bg-white text-baoding-dark shadow-sm'
+                    : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  分类设置
+                </button>
+              </div>
+            </div>
+
+            {/* Right: Close Button */}
+            <button
+              onClick={onClose}
+              className="text-gray-300 hover:text-white transition-colors p-1.5"
+              title="退出后台"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -125,8 +157,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
               />
-              <button 
-                onClick={() => setEditingDish({})} 
+              <button
+                onClick={() => setEditingDish({ category: categories[0]?.name || '' })}
                 className="bg-baoding-red text-white px-4 py-3 md:py-2 rounded hover:bg-red-800 font-bold shadow-sm"
               >
                 + 新增菜品
@@ -324,8 +356,20 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
 
               <div className="flex gap-3 mt-6 pt-4 border-t">
-                <button onClick={() => setEditingDish(null)} className="flex-1 py-3 text-gray-600 bg-gray-100 rounded-lg font-medium">取消</button>
-                <button onClick={handleSaveDish} className="flex-1 py-3 bg-baoding-red text-white rounded-lg font-bold shadow-md hover:bg-red-800 transition-colors">保存</button>
+                <button
+                  type="button"
+                  onClick={() => setEditingDish(null)}
+                  className="flex-1 py-3 text-gray-600 bg-gray-100 rounded-lg font-medium"
+                >
+                  取消
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => handleSaveDish(e)}
+                  className="flex-1 py-3 bg-baoding-red text-white rounded-lg font-bold shadow-md hover:bg-red-800 transition-colors"
+                >
+                  保存
+                </button>
               </div>
             </div>
           </div>

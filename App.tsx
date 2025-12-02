@@ -8,13 +8,13 @@ import AdminPanel from './components/AdminPanel';
 type ViewMode = 'business' | 'family';
 type PageMode = 'menu' | 'admin';
 
-const MenuPage = ({ 
-  categories, 
+const MenuPage = ({
+  categories,
   dishes,
-  isFront, 
-  viewMode 
-}: { 
-  categories: CategoryConfig[], 
+  isFront,
+  viewMode
+}: {
+  categories: CategoryConfig[],
   dishes: Dish[],
   isFront: boolean,
   viewMode: ViewMode
@@ -22,40 +22,41 @@ const MenuPage = ({
   // Grid Layout Logic
   // Business: 2 columns, wide gap
   // Family: 4 columns, narrower gap
-  const gridClass = viewMode === 'business' 
-    ? 'grid-cols-2 gap-x-16 gap-y-3' 
-    : 'grid-cols-4 gap-x-4 gap-y-4';
+  // Mobile: Always 2 columns for better readability
+  const gridClass = viewMode === 'business'
+    ? 'grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-16 gap-y-3'
+    : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-2 sm:gap-x-4 gap-y-3 sm:gap-y-4';
 
   const getDishesByCategory = (catName: string) => dishes.filter(d => d.category === catName);
 
   return (
-    <div className="menu-page w-[210mm] min-h-[297mm] mx-auto bg-baoding-paper shadow-2xl relative flex flex-col p-12 print-break shrink-0">
+    <div className="menu-page w-full sm:w-[210mm] min-h-[297mm] mx-auto bg-baoding-paper shadow-2xl relative flex flex-col p-4 sm:p-8 lg:p-12 print-break shrink-0">
       {/* Decorative Border */}
-      <div className="absolute inset-4 border-4 border-double border-baoding-red pointer-events-none z-10"></div>
-      <div className="absolute inset-6 border border-baoding-red/30 pointer-events-none z-10"></div>
-      
+      <div className="absolute inset-2 sm:inset-4 border-2 sm:border-4 border-double border-baoding-red pointer-events-none z-10"></div>
+      <div className="absolute inset-3 sm:inset-6 border border-baoding-red/30 pointer-events-none z-10"></div>
+
       {/* Corner Decors */}
-      <div className="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-baoding-red z-20"></div>
-      <div className="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-baoding-red z-20"></div>
-      <div className="absolute bottom-4 left-4 w-12 h-12 border-b-4 border-l-4 border-baoding-red z-20"></div>
-      <div className="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-baoding-red z-20"></div>
+      <div className="absolute top-2 sm:top-4 left-2 sm:left-4 w-8 sm:w-12 h-8 sm:h-12 border-t-2 sm:border-t-4 border-l-2 sm:border-l-4 border-baoding-red z-20"></div>
+      <div className="absolute top-2 sm:top-4 right-2 sm:right-4 w-8 sm:w-12 h-8 sm:h-12 border-t-2 sm:border-t-4 border-r-2 sm:border-r-4 border-baoding-red z-20"></div>
+      <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 w-8 sm:w-12 h-8 sm:h-12 border-b-2 sm:border-b-4 border-l-2 sm:border-l-4 border-baoding-red z-20"></div>
+      <div className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 w-8 sm:w-12 h-8 sm:h-12 border-b-2 sm:border-b-4 border-r-2 sm:border-r-4 border-baoding-red z-20"></div>
 
       {/* Content Container */}
       <div className="relative z-30 h-full flex flex-col flex-1">
         
         {/* Header Area (Front Page Only - TOP) */}
         {isFront && (
-          <div className="text-center pb-6 mb-8">
+          <div className="text-center pb-4 sm:pb-6 mb-4 sm:mb-8">
             <div className="mb-2">
-              <h1 className="text-7xl font-serif font-black text-baoding-red mb-2 tracking-[0.1em]">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-serif font-black text-baoding-red mb-2 tracking-[0.05em] sm:tracking-[0.1em]">
                 SGG · 私房菜
               </h1>
-              <p className="text-baoding-dark/80 font-serif text-xl tracking-[0.3em] uppercase">
+              <p className="text-baoding-dark/80 font-serif text-sm sm:text-lg lg:text-xl tracking-[0.2em] sm:tracking-[0.3em] uppercase">
                 SGG Private Kitchen
               </p>
             </div>
-            
-            <div className="flex justify-center items-center gap-6 text-xs text-baoding-dark/60 font-serif mt-4">
+
+            <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 lg:gap-6 text-xs sm:text-sm text-baoding-dark/60 font-serif mt-3 sm:mt-4">
                <span>匠心传承</span>
                <span className="w-1 h-1 bg-baoding-gold rounded-full"></span>
                <span>地道风味</span>
@@ -70,28 +71,28 @@ const MenuPage = ({
         )}
         
         {/* Categories List */}
-        <div className="flex-1 space-y-8">
+        <div className="flex-1 space-y-4 sm:space-y-6 lg:space-y-8">
           {categories.map(cat => {
             const catDishes = getDishesByCategory(cat.name);
             if (catDishes.length === 0) return null;
 
             return (
-              <section key={cat.id} className="mb-6">
-                <div className="flex items-center justify-center mb-6">
-                   <div className="h-[1px] bg-baoding-gold w-16"></div>
-                   <div className="mx-4 flex flex-col items-center">
-                      <h2 className="text-2xl font-serif font-bold text-baoding-red tracking-widest">{cat.name}</h2>
+              <section key={cat.id} className="mb-4 sm:mb-6">
+                <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6">
+                   <div className="h-[1px] bg-baoding-gold w-8 sm:w-12 lg:w-16"></div>
+                   <div className="mx-2 sm:mx-3 lg:mx-4 flex flex-col items-center">
+                      <h2 className="text-lg sm:text-xl lg:text-2xl font-serif font-bold text-baoding-red tracking-wide sm:tracking-wider lg:tracking-widest">{cat.name}</h2>
                    </div>
-                   <div className="h-[1px] bg-baoding-gold w-16"></div>
+                   <div className="h-[1px] bg-baoding-gold w-8 sm:w-12 lg:w-16"></div>
                 </div>
-                
+
                 {/* Dynamic Grid */}
-                <div className={`grid ${gridClass} px-2`}>
+                <div className={`grid ${gridClass} px-3 sm:px-4 lg:px-2`}>
                   {catDishes.map(dish => (
-                    <DishCard 
-                      key={dish.id} 
-                      dish={dish} 
-                      showPrice={viewMode === 'business'} 
+                    <DishCard
+                      key={dish.id}
+                      dish={dish}
+                      showPrice={viewMode === 'business'}
                     />
                   ))}
                 </div>
@@ -102,11 +103,11 @@ const MenuPage = ({
 
         {/* Footer (Back Page Only) */}
         {!isFront && (
-          <footer className="mt-auto pt-8 text-center text-baoding-dark/60 text-xs font-serif shrink-0">
+          <footer className="mt-auto pt-4 sm:pt-6 lg:pt-8 pb-4 sm:pb-6 lg:pb-8 text-center text-baoding-dark/60 text-xs sm:text-sm font-serif shrink-0">
             <p className="mb-2">每一道菜都是岁月的味道</p>
-            <div className="flex justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-4 text-xs sm:text-sm">
                <p>WIFI: SGG_Guest</p>
-               <p>|</p>
+               <p className="hidden sm:inline">|</p>
                <p>预订电话: 0312-8888888</p>
             </div>
           </footer>
@@ -118,8 +119,17 @@ const MenuPage = ({
 
 function App() {
   const [isDownloading, setIsDownloading] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>('business');
+  const [viewMode, setViewMode] = useState<ViewMode>('family');
   const [pageMode, setPageMode] = useState<PageMode>('menu');
+
+  // Set default view mode to family on first load
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+    if (mode === 'business' || mode === 'family') {
+      setViewMode(mode as ViewMode);
+    }
+  }, []);
 
   // Dynamic Data States
   const [dishes, setDishes] = useState<Dish[]>([]);
@@ -219,76 +229,87 @@ function App() {
   const backCategories = categories.filter(c => !c.isFront);
 
   return (
-    <div className="min-h-screen py-4 md:py-8 flex flex-col items-center bg-stone-800 overflow-x-hidden">
+    <div className="min-h-screen py-2 sm:py-4 md:py-8 flex flex-col items-center bg-stone-800 overflow-x-hidden">
       
-      {/* Responsive Control Bar */}
-      <div className="no-print fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-md p-3 md:p-4 flex flex-col md:flex-row justify-between items-center z-50 border-b border-stone-200 gap-3 md:gap-0">
-        
-        <div className="flex flex-col md:flex-row items-center gap-3 md:gap-6 w-full md:w-auto">
-          <div className="flex items-center gap-2">
-            <h1 className="font-bold text-gray-800 text-lg leading-tight whitespace-nowrap">SGG · 私房菜</h1>
-            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">预览</span>
-          </div>
-          
-          {/* Mode Toggles */}
-          <div className="flex bg-stone-100 p-1 rounded-lg w-full md:w-auto justify-center">
-             <button 
-               onClick={() => setViewMode('business')}
-               className={`flex-1 md:flex-none px-3 py-1.5 rounded-md text-xs md:text-sm font-bold transition-all whitespace-nowrap ${
-                 viewMode === 'business' 
-                 ? 'bg-white text-baoding-red shadow-sm' 
-                 : 'text-gray-500 hover:text-gray-700'
-               }`}
-             >
-               商业版
-             </button>
-             <button 
-               onClick={() => setViewMode('family')}
-               className={`flex-1 md:flex-none px-3 py-1.5 rounded-md text-xs md:text-sm font-bold transition-all whitespace-nowrap ${
-                 viewMode === 'family' 
-                 ? 'bg-white text-baoding-red shadow-sm' 
-                 : 'text-gray-500 hover:text-gray-700'
-               }`}
-             >
-               家庭版
-             </button>
-          </div>
-        </div>
+      {/* Simplified Control Bar */}
+      <div className="no-print fixed top-0 left-0 right-0 bg-white shadow-sm z-50 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-3 md:px-6 py-2 md:py-2.5">
+          <div className="flex items-center justify-between gap-2 md:gap-4">
 
-        <div className="flex gap-2 w-full md:w-auto justify-center overflow-x-auto pb-1 md:pb-0 px-1 md:px-0">
-          <button 
-             onClick={() => setPageMode('admin')}
-             className="text-gray-600 hover:text-baoding-red font-bold text-xs md:text-sm px-3 py-2 bg-gray-50 rounded-lg whitespace-nowrap border border-gray-200 md:bg-transparent md:border-none"
-          >
-            ⚙️ 管理
-          </button>
-          <div className="hidden md:block w-[1px] bg-gray-300 h-6 self-center"></div>
-          <button 
-            onClick={handleDownloadPDF}
-            disabled={isDownloading}
-            className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-3 py-2 rounded-lg shadow-sm font-bold flex items-center gap-2 transition-colors disabled:opacity-50 text-xs md:text-sm whitespace-nowrap"
-          >
-            {isDownloading ? '...' : 'PDF'}
-          </button>
+            {/* Left: Brand & Mode Toggle */}
+            <div className="flex items-center gap-2 md:gap-6">
+              <h1 className="font-bold text-gray-800 text-sm md:text-lg whitespace-nowrap">SGG · 私房菜</h1>
 
-          <button 
-            onClick={handlePrint}
-            className="bg-baoding-red hover:bg-red-900 text-white px-4 py-2 rounded-lg shadow-lg font-bold flex items-center gap-2 transition-colors text-xs md:text-sm whitespace-nowrap"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-            </svg>
-            打印
-          </button>
+              {/* Compact Mode Toggle */}
+              <div className="flex items-center bg-gray-50 rounded-md p-0.5">
+                <button
+                  onClick={() => setViewMode('business')}
+                  className={`px-2 md:px-3 py-1 rounded text-[11px] md:text-xs font-medium transition-all whitespace-nowrap ${
+                    viewMode === 'business'
+                    ? 'bg-white text-baoding-red shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  商业版
+                </button>
+                <button
+                  onClick={() => setViewMode('family')}
+                  className={`px-2 md:px-3 py-1 rounded text-[11px] md:text-xs font-medium transition-all whitespace-nowrap ${
+                    viewMode === 'family'
+                    ? 'bg-white text-baoding-red shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  家庭版
+                </button>
+              </div>
+            </div>
+
+            {/* Right: Action Buttons */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setPageMode('admin')}
+                className="text-gray-500 hover:text-baoding-red transition-colors p-1.5 md:p-2"
+                title="管理"
+              >
+                <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
+
+              <button
+                onClick={handleDownloadPDF}
+                disabled={isDownloading}
+                className="text-gray-500 hover:text-gray-700 transition-colors p-1.5 md:p-2 disabled:opacity-50"
+                title="下载PDF"
+              >
+                <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </button>
+
+              <button
+                onClick={handlePrint}
+                className="bg-baoding-red hover:bg-red-900 text-white px-3 md:px-4 py-1.5 md:py-2 rounded-md transition-colors flex items-center gap-1.5 text-xs md:text-sm font-medium"
+              >
+                <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                <span className="hidden sm:inline">打印</span>
+              </button>
+            </div>
+
+          </div>
         </div>
       </div>
 
-      <div className="no-print h-[120px] md:h-16"></div>
+      <div className="no-print h-[52px] md:h-[56px]"></div>
 
-      {/* Preview Container with Horizontal Scroll for Mobile */}
-      {/* Added ID for Print CSS Targeting */}
-      <div id="print-container-wrapper" className="w-full overflow-x-auto overflow-y-hidden pb-8 px-4 flex justify-center items-start">
-        <div id="menu-content" className="flex flex-col gap-8 items-center min-w-[210mm]">
+      {/* Preview Container with Responsive Layout */}
+      {/* Mobile: Full width, Desktop: A4 size */}
+      <div id="print-container-wrapper" className="w-full overflow-x-auto overflow-y-hidden pb-8 px-2 sm:px-4 flex justify-center items-start">
+        <div id="menu-content" className="flex flex-col gap-4 sm:gap-6 lg:gap-8 items-center w-full sm:min-w-[210mm] sm:w-auto">
           {/* Page 1: Front */}
           <MenuPage 
             isFront={true} 

@@ -53,9 +53,16 @@ const CartSummary: React.FC<CartSummaryProps> = ({
           >
             <div className="flex items-start justify-between mb-2">
               <div className="flex-1">
-                <h4 className="font-serif font-semibold text-baoding-dark text-sm">
-                  {item.name}
-                </h4>
+                <div className="flex items-baseline">
+                  <h4 className="font-serif font-semibold text-baoding-dark text-sm">
+                    {item.name}
+                  </h4>
+                  {item.popular && (
+                    <span className="ml-2 text-xs bg-baoding-red text-white px-1.5 py-0.5 rounded">
+                      招牌
+                    </span>
+                  )}
+                </div>
                 <p className="text-xs text-baoding-red font-medium mt-1">
                   ¥{item.price}
                 </p>

@@ -225,6 +225,11 @@ function App() {
   };
 
   const handlePrint = () => {
+    // 自动切换到非下单模式
+    if (orderMode) {
+      setOrderMode(false);
+    }
+
     window.focus();
     setTimeout(() => {
         try {

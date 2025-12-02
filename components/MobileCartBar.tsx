@@ -64,11 +64,11 @@ const MobileCartBar: React.FC<MobileCartBarProps> = ({
         >
           {/* Drawer */}
           <div
-            className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl max-h-[80vh] flex flex-col animate-slide-up"
+            className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl max-h-[80vh] flex flex-col animate-slide-up overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Drawer Handle */}
-            <div className="flex justify-center pt-3 pb-2">
+            <div className="flex justify-center pt-3 pb-2 shrink-0">
               <div className="w-12 h-1.5 bg-gray-300 rounded-full"></div>
             </div>
 
@@ -81,7 +81,7 @@ const MobileCartBar: React.FC<MobileCartBarProps> = ({
                 setIsDrawerOpen(false);
                 onViewOrder();
               }}
-              className="flex-1"
+              className="flex-1 min-h-0"
             />
           </div>
         </div>

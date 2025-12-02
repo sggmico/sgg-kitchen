@@ -16,6 +16,12 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children, onClose }) => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
+    // Check if Supabase is configured
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     // Check active session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -37,6 +43,12 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children, onClose }) => {
     setError('');
     setIsLoggingIn(true);
 
+    if (!supabase) {
+      setError('Supabase 未配置，无法登录');
+      setIsLoggingIn(false);
+      return;
+    }
+
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -52,6 +64,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children, onClose }) => {
   };
 
   const handleLogout = async () => {
+    if (!supabase) return;
     await supabase.auth.signOut();
     onClose();
   };

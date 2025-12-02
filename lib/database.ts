@@ -1,9 +1,19 @@
 import { supabase } from './supabase';
 import type { Dish, CategoryConfig } from '../types';
 
+// Helper to ensure supabase is configured
+function ensureSupabase() {
+  if (!supabase) {
+    throw new Error('Supabase is not configured');
+  }
+  return supabase;
+}
+
 // Categories
 export async function getCategories(): Promise<CategoryConfig[]> {
-  const { data, error } = await supabase
+  const client = ensureSupabase();
+
+  const { data, error } = await client
     .from('categories')
     .select('*')
     .order('display_order', { ascending: true });
@@ -18,7 +28,7 @@ export async function getCategories(): Promise<CategoryConfig[]> {
 }
 
 export async function createCategory(category: Omit<CategoryConfig, 'id'>): Promise<CategoryConfig> {
-  const { data, error } = await supabase
+  const { data, error } = await ensureSupabase()
     .from('categories')
     .insert({
       name: category.name,
@@ -42,7 +52,7 @@ export async function updateCategory(id: string, updates: Partial<CategoryConfig
   if (updates.name !== undefined) updateData.name = updates.name;
   if (updates.isFront !== undefined) updateData.is_front = updates.isFront;
 
-  const { error } = await supabase
+  const { error } = await ensureSupabase()
     .from('categories')
     .update(updateData)
     .eq('id', id);
@@ -51,7 +61,7 @@ export async function updateCategory(id: string, updates: Partial<CategoryConfig
 }
 
 export async function deleteCategory(id: string): Promise<void> {
-  const { error } = await supabase
+  const { error } = await ensureSupabase()
     .from('categories')
     .delete()
     .eq('id', id);
@@ -66,7 +76,7 @@ export async function reorderCategories(categories: CategoryConfig[]): Promise<v
   }));
 
   for (const update of updates) {
-    await supabase
+    await ensureSupabase()
       .from('categories')
       .update({ display_order: update.display_order })
       .eq('id', update.id);
@@ -75,7 +85,7 @@ export async function reorderCategories(categories: CategoryConfig[]): Promise<v
 
 // Dishes
 export async function getDishes(): Promise<Dish[]> {
-  const { data, error } = await supabase
+  const { data, error } = await ensureSupabase()
     .from('dishes')
     .select('*')
     .order('created_at', { ascending: true });
@@ -95,7 +105,7 @@ export async function getDishes(): Promise<Dish[]> {
 }
 
 export async function createDish(dish: Omit<Dish, 'id'>): Promise<Dish> {
-  const { data, error } = await supabase
+  const { data, error } = await ensureSupabase()
     .from('dishes')
     .insert({
       name: dish.name,
@@ -133,7 +143,7 @@ export async function updateDish(id: string, updates: Partial<Dish>): Promise<vo
   if (updates.spicyLevel !== undefined) updateData.spicy_level = updates.spicyLevel;
   if (updates.popular !== undefined) updateData.popular = updates.popular;
 
-  const { error } = await supabase
+  const { error } = await ensureSupabase()
     .from('dishes')
     .update(updateData)
     .eq('id', id);
@@ -142,7 +152,7 @@ export async function updateDish(id: string, updates: Partial<Dish>): Promise<vo
 }
 
 export async function deleteDish(id: string): Promise<void> {
-  const { error } = await supabase
+  const { error } = await ensureSupabase()
     .from('dishes')
     .delete()
     .eq('id', id);

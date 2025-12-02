@@ -4,10 +4,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
-    // Use /skitchen/ for GitHub Pages deployment
-    const base = mode === 'production' ? '/skitchen/' : '/';
     return {
-      base,
+      base: '/skitchen/',
       server: {
         port: 3000,
         host: '0.0.0.0',
